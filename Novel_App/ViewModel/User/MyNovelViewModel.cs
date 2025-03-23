@@ -125,10 +125,10 @@ namespace Novel_App.ViewModel.User
 
         private void ViewChapter(object obj)
         {
-            textboxitem = new Novel();
-            searchitem = "";
-            NovelList = new ObservableCollection<Novel>(All);
-            OnPropertyChanged(nameof(NovelList));
+            if (selecteditem != null)
+            {
+
+            }
         }
 
         private Boolean _isListVisible;

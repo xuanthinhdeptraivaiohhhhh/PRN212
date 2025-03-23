@@ -23,11 +23,12 @@ namespace Novel_App.View.User
         public UserHomePageView()
         {
             InitializeComponent();
+            FrMain.Content = new NovelsView();
         }
 
         private void Home_Click(object sender, RoutedEventArgs e)
         {
-            FrMain.Content = null;
+            FrMain.Content = new NovelsView();
         }
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)

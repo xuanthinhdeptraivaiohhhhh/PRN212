@@ -1,0 +1,169 @@
+﻿<Window x:Class="Novel_App.View.User.ChapterView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Novel_App.View.User"
+        xmlns:utils="clr-namespace:Novel_App.Utilities"
+        mc:Ignorable="d"
+        Title="Chapter View" Height="675" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5">
+    <Window.Resources>
+        <utils:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Thanh tìm kiếm -->
+            <RowDefinition Height="*"/>
+            <!-- Danh sách và chi tiết -->
+            <RowDefinition Height="Auto"/>
+            <!-- Thanh dưới cùng -->
+        </Grid.RowDefinitions>
+
+        <!-- Thanh tìm kiếm -->
+        <Border Grid.Row="0" Background="#E0E0E0" CornerRadius="5" Padding="10" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- TextBox tìm kiếm -->
+                <TextBox Grid.Column="0" Text="{Binding SearchName, UpdateSourceTrigger=PropertyChanged}" 
+                         Width="500" Height="30" VerticalContentAlignment="Center" 
+                         Background="White" BorderBrush="#B0B0B0" BorderThickness="1" 
+                         Padding="5" Margin="0,0,10,0"/>
+
+                <!-- Nút Back -->
+                <Button Grid.Column="1" Command="{Binding BackCommand}" 
+                        Width="30" Height="30" Background="#FF5733" 
+                        BorderThickness="0" Cursor="Hand" Margin="0,0,5,0">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                                CornerRadius="15">
+                                            <Path Data="M5,10 L15,10 M5,10 L9,6 M5,10 L9,14" 
+                                                  Stroke="White" StrokeThickness="2" 
+                                                  Width="20" Height="20" 
+                                                  Stretch="Uniform" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#E64A2F"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Danh sách chương và chi tiết -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Danh sách chương -->
+            <Border Grid.Column="0" Background="White" CornerRadius="5" 
+                    BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,10,0">
+                <ListView ItemsSource="{Binding Chapters}" 
+                          SelectedItem="{Binding selectitem, Mode=OneWayToSource}" 
+                          Margin="5" BorderThickness="0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock VerticalAlignment="Center" FontSize="14">
+                                    <Run Text="Chapter "/>
+                                    <Run Text="{Binding ChapterNumber}"/>
+                                    <Run Text=": "/>
+                                    <Run Text="{Binding ChapterName}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+
+            <!-- Chi tiết chương -->
+            <Border Grid.Column="1" Background="White" CornerRadius="5" 
+                    BorderBrush="#E0E0E0" BorderThickness="1" Padding="10"
+                    Visibility="{Binding selectitem, Converter={StaticResource NullToVisibilityConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <!-- Thông tin chi tiết -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Nút View Content -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Thông tin chi tiết (thêm ScrollViewer) -->
+                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock Text="Chapter Name: " FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="{Binding selectitem.ChapterName}" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock Text="Chapter Number: " FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="{Binding selectitem.ChapterNumber}" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock Text="Published Date: " FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="{Binding selectitem.PublishedDate, StringFormat={}{0:dd/MM/yyyy}}" 
+                                           FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock Text="Status: " FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="{Binding selectitem.ChapterStatus}" FontSize="14"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Nút View Content -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                        <Button Content="View Content" Command="{Binding ViewContentCommand}" 
+                                Width="120" Height="35" Background="#2196F3" Foreground="White" 
+                                BorderThickness="0" Margin="5" Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" 
+                                                        CornerRadius="5">
+                                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#1E88E5"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <!-- Có thể thêm các nút khác vào đây sau này -->
+        </StackPanel>
+    </Grid>
+</Window>
