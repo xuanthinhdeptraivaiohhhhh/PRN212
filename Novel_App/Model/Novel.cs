@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Novel_App.Model;
 
@@ -44,4 +46,7 @@ public partial class Novel
     public virtual ICollection<Viewing> Viewings { get; set; } = new List<Viewing>();
 
     public virtual ICollection<Genre> Genres { get; set; } = new List<Genre>();
+
+    [NotMapped]
+    public String GenreString => string .Join(", ", Genres.Select(g => g.GenreName));
 }

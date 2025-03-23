@@ -1,0 +1,224 @@
+﻿<Page x:Class="Novel_App.View.User.MyNovelView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Novel_App.View.User" xmlns:user="clr-namespace:Novel_App.ViewModel.User" xmlns:helper="clr-namespace:Novel_App.Utilities"  
+      d:DataContext="{d:DesignInstance Type=user:MyNovelViewModel}"
+      mc:Ignorable="d" 
+      d:DesignHeight="675" d:DesignWidth="1200"
+      Title="MyNovel">
+    <Page.Resources>
+        <Style TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" CornerRadius="15"
+                                Margin="7 0"
+                                Height="32"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="#FFAE907D"
+                            BorderThickness="1"
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter Content="{TemplateBinding Content}" 
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          RecognizesAccessKey="True"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <!-- Hiệu ứng Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="LightBlue"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="Blue"/>
+                            </Trigger>
+
+                            <!-- Hiệu ứng Click -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="DarkBlue"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="Navy"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="AliceBlue">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="8*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="3.5*"/>
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Row="0" Grid.Column="0" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Margin="0 15 0 0" Grid.Row="0" FontSize="14" HorizontalAlignment="Right">Title</TextBlock>
+            <TextBlock Margin="0 15 0 0" Grid.Row="1" FontSize="14" HorizontalAlignment="Right">Chapter</TextBlock>
+            <TextBlock Margin="0 15 0 0" Grid.Row="2" FontSize="14" HorizontalAlignment="Right">Description</TextBlock>
+            <TextBlock Margin="0 15 0 0" Grid.Row="5" FontSize="14" HorizontalAlignment="Right">Genre</TextBlock>
+        </Grid >
+
+        <Grid Grid.Row="0" Grid.Column="1" Margin="0 10 20 10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Margin="7" FontSize="14px" VerticalContentAlignment="Center"
+             Text="{Binding textboxitem.NovelName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Grid.Row="1" Margin="7" FontSize="14px" VerticalContentAlignment="Center"
+             Text="{Binding textboxitem.TotalChapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+            <TextBox Grid.Row="2" Grid.RowSpan="3" Margin="7" FontSize="14px" 
+                     TextWrapping="wrap" AcceptsReturn="true" VerticalScrollBarVisibility="Auto"
+             Text="{Binding textboxitem.NovelDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+            <ComboBox x:Name="genre" Grid.Row="5" Margin="7" SelectedIndex="0" FontSize="14px" VerticalContentAlignment="Center"
+                      ItemsSource="{Binding GenreList}"
+                      DisplayMemberPath="GenreName"
+                      SelectedItem="{Binding selectedGenre, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            </ComboBox>
+
+            <!--<ListBox Grid.Row="4" Grid.RowSpan="2" Margin="7" SelectedIndex="0"
+                     x:Name="ListBox"
+                     ItemsSource="{Binding AvailableGenre}"
+                     SelectionMode="Multiple"
+                     DisplayMemberPath="GenreName"
+                     SelectionChanged="ListBox_SelectionChanged"
+                   
+                     >
+                
+            </ListBox>-->
+
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="50 0">
+            <!--<Button Content="Submit" HorizontalAlignment="Left" Margin="70,10,0,0" VerticalAlignment="Top" Height="25" Width="68" Background="Bisque"/>
+<Button Content="Reset" HorizontalAlignment="Left" Margin="150,10,0,0" VerticalAlignment="Top" Height="25" Width="68" Background="Beige"/>-->
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+
+            <Button Command="{Binding AddCommand}" Content="Add" Grid.Row="0" Grid.Column="0" Margin="15 0" Background="#FF7CDCED"/>
+            <Button Command="{Binding UpdateCommand}" Content="Update" Grid.Row="0" Grid.Column="1" Margin="15" Background="#FF7CDCED"/>
+            <Button Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="0" Grid.Column="2" Margin="15" Background="#FFED7D8D"/>
+            <Button Command="{Binding SearchCommand}" Content="Search" Grid.Row="1" Grid.Column="2" Margin="15" Background="#FFE5E5E5"/>
+            <TextBox  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="20 15" VerticalContentAlignment="Center" Text="{Binding searchitem, Mode=TwoWay}"/>
+
+
+            <Button Command="{Binding ViewChapterCommand}" Content="View Chapter" Grid.Row="2" Grid.Column="0" Margin="15" Background="#FFE5E5E5"/>
+            <Button Command="{Binding ViewDetailCommand}" Content="View detail" Grid.Row="2" Grid.Column="1" Margin="15" Background="#FFE5E5E5"/>
+            <Button Command="{Binding ClearCommand}" Content="Clear" Grid.Row="2" Grid.Column="2" Margin="15" Background="#FFE5E5E5"/>
+        </Grid>
+
+        <Grid Grid.Row="0"  Grid.Column="2" Grid.RowSpan="2">
+            <ListView x:Name="ListView" ItemsSource="{Binding NovelList}" 
+              SelectedItem="{Binding selecteditem, Mode=OneWayToSource}"
+              FontSize="14px" Background="AliceBlue" Margin="0 0 0 0 " FontWeight="Bold" SelectionChanged="ListView_SelectionChanged">
+
+
+                <ListView.Style>
+                    <Style TargetType="ListView">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsListVisible}" Value="true">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Style>
+
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" Width="auto" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Name="ID" Text="{Binding NovelId}" Padding="10 0 10 0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Novel Name" Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Name="FullName" Text="{Binding NovelName}"  Padding="10 0 10 0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Total of Chapter" Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Name="Phone" Text="{Binding TotalChapter}"  Padding="10 0 10 0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Published Date" Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Name="Birthday" Text="{Binding PublishedDate}"  Padding="10 0 10 0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+
+                        <GridViewColumn Header="Genre" Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Name="Status" Text="{Binding GenreString}"  Padding="10 0 10 0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+        </Grid>
+
+
+
+
+
+
+    </Grid>
+</Page>

@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\b3.png" />
+    <None Remove="Images\backgroundLogin.jpg" />
+    <None Remove="Images\padlock.png" />
+    <None Remove="Images\user.png" />
+    <None Remove="Images\user2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,12 +28,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModel\Adminn\" />
-    <Folder Include="ViewModel\Staff\" />
-    <Folder Include="ViewModel\User\" />
-    <Folder Include="View\Admin\" />
-    <Folder Include="View\Staff\" />
-    <Folder Include="View\User\" />
+    <Resource Include="Images\b3.png" />
+    <Resource Include="Images\backgroundLogin.jpg" />
+    <Resource Include="Images\padlock.png" />
+    <Resource Include="Images\user.png" />
+    <Resource Include="Images\user2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
