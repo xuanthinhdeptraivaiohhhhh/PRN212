@@ -31,11 +31,7 @@ namespace Novel_App.View.User
             FrMain.Content = new NovelsView();
         }
 
-        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            FrMain.Content = new MyListChapterView();
-        }
-
+      
         private void Mynovel_Click(object sender, RoutedEventArgs e)
         {
             FrMain.Content = new MyNovelView();

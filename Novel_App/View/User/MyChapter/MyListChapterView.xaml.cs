@@ -24,11 +24,11 @@ namespace Novel_App.View.User.MyChapter
     public partial class MyListChapterView : Page
     {
         public Chapter SelectedChapter { get; set; }
-        public MyListChapterView()
+        public MyListChapterView(int novelId)
         {
             InitializeComponent();
             int userID = UserSession.Instance.Account.UserId;
-            int novelID = 1;
+            int novelID = novelId;
             DataContext = new MychapterViewModel(userID, novelID);
         }
 

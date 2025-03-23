@@ -14,6 +14,8 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using Novel_App.View.User.MyChapter;
+using System.Windows.Navigation;
 
 namespace Novel_App.ViewModel.User
 {
@@ -127,7 +129,6 @@ namespace Novel_App.ViewModel.User
         {
             if (selecteditem != null)
             {
-
             }
         }
 
@@ -156,6 +157,7 @@ namespace Novel_App.ViewModel.User
             {
                 var list = context.Novels
                     .Include(n => n.Genres)
+                    .Where(n => n.UserId == UserSession.Instance.Account.UserId)
                     .ToList();
                 NovelList = new ObservableCollection<Novel>(list);
             }

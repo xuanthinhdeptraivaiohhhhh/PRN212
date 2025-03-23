@@ -134,7 +134,7 @@
             <TextBox  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="20 15" VerticalContentAlignment="Center" Text="{Binding searchitem, Mode=TwoWay}"/>
 
 
-            <Button Command="{Binding ViewChapterCommand}" Content="View Chapter" Grid.Row="2" Grid.Column="0" Margin="15" Background="#FFE5E5E5"/>
+            <Button Command="{Binding ViewChapterCommand}" Content="View Chapter" Grid.Row="2" Grid.Column="0" Margin="15" Background="#FFE5E5E5" Click="Button_Click"/>
             <Button Command="{Binding ViewDetailCommand}" Content="View detail" Grid.Row="2" Grid.Column="1" Margin="15" Background="#FFE5E5E5"/>
             <Button Command="{Binding ClearCommand}" Content="Clear" Grid.Row="2" Grid.Column="2" Margin="15" Background="#FFE5E5E5"/>
         </Grid>

@@ -16,7 +16,7 @@
 
         <Menu Grid.Row="0">
             <MenuItem Header="Home" Height="35" Margin="0 5 5 0" BorderBrush="Red" FontSize="14" FontWeight="Bold" Foreground="blue" Click="Home_Click"></MenuItem>
-            <MenuItem Header="Student" Height="35" Margin="0 5 5 0" BorderBrush="Red" FontSize="14" FontWeight="Bold" Foreground="blue" Click="MenuItem_Click_1"></MenuItem>
+            
             <MenuItem Header="My Novel" Height="35" Margin="0 5 5 0" BorderBrush="Red" FontSize="14" FontWeight="Bold" Foreground="blue" Click="Mynovel_Click"></MenuItem>
         </Menu>
         <Frame Grid.Row="1" x:Name="FrMain" NavigationUIVisibility="Hidden" Margin="0"/>
