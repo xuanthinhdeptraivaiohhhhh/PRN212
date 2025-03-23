@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,31 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
-using Novel_App.View.Staff;
 using Novel_App.ViewModel.Staff;
-using Novel_App.View;
-using Novel_App.ViewModel.User;
-using Novel_App.View.User;
 
-
-namespace Novel_App
+namespace Novel_App.View.Staff
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GenreView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GenreView : Page
     {
-        public MainWindow()
+        public GenreView()
         {
             InitializeComponent();
             DataContext = new GenreViewModel();
-
         }
-        private void ViewGenres_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new GenreView());
-        }
-        
     }
 }
