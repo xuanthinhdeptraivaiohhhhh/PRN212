@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Navigation;
+using Microsoft.EntityFrameworkCore;
 using Novel_App.Model;
 using Novel_App.Utilities;
 using Novel_App.View.User;
-using System.Windows;
 
 namespace Novel_App.ViewModel.User
 {
@@ -22,17 +20,50 @@ namespace Novel_App.ViewModel.User
         public ICommand SearchCommand { get; }
         public ICommand ViewChaptersCommand { get; }
         public ICommand ViewMyNovelCommand { get; }
+        public ICommand ToggleFavoriteCommand { get; }
+        public ICommand ToggleViewFavoritesCommand { get; }
 
-        // Hàm dựng
-        public NovelViewModel()
+        private readonly int _userId;
+        private readonly NavigationService _navigationService;
+        private bool _isViewingFavorites;
+        private string _viewFavoritesButtonText;
+        private string _favoriteButtonText;
+
+        public string ViewFavoritesButtonText
         {
+            get => _viewFavoritesButtonText;
+            set
+            {
+                _viewFavoritesButtonText = value;
+                OnPropertyChanged(nameof(ViewFavoritesButtonText));
+            }
+        }
+
+        public string FavoriteButtonText
+        {
+            get => _favoriteButtonText;
+            set
+            {
+                _favoriteButtonText = value;
+                OnPropertyChanged(nameof(FavoriteButtonText));
+            }
+        }
+
+        public NovelViewModel(NavigationService navigationService)
+        {
+            _navigationService = navigationService;
+            _userId = UserSession.Instance.Account?.UserId ?? 0;
             allnovels = new ObservableCollection<Novel>();
             Novels = new ObservableCollection<Novel>();
+            _isViewingFavorites = false;
+            ViewFavoritesButtonText = "View Favorites";
             Load();
             textboxitem = new Novel();
             SearchCommand = new RelayCommand(Search);
             ViewChaptersCommand = new RelayCommand(ViewChapters);
             ViewMyNovelCommand = new RelayCommand(ViewMyNovel);
+            ToggleFavoriteCommand = new RelayCommand(ToggleFavorite);
+            ToggleViewFavoritesCommand = new RelayCommand(ToggleViewFavorites);
         }
 
         private Novel _textboxitem;
@@ -54,17 +85,18 @@ namespace Novel_App.ViewModel.User
             {
                 _selectitem = value;
                 OnPropertyChanged(nameof(selectitem));
-
-                // Cập nhật textboxitem khi chọn một item
                 if (_selectitem != null)
                 {
-                    // Cấu hình JsonSerializerSettings để bỏ qua vòng lặp
-                    var settings = new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    };
-                    _textboxitem = JsonConvert.DeserializeObject<Novel>(JsonConvert.SerializeObject(_selectitem, settings), settings);
+                    // Không cần sao chép bằng JsonConvert, chỉ cần gán trực tiếp
+                    _textboxitem = _selectitem;
                     OnPropertyChanged(nameof(textboxitem));
+
+                    // Cập nhật văn bản của nút Favorite
+                    UpdateFavoriteButtonText();
+                }
+                else
+                {
+                    FavoriteButtonText = "Add to Favorites";
                 }
             }
         }
@@ -78,7 +110,29 @@ namespace Novel_App.ViewModel.User
             {
                 _searchName = value;
                 OnPropertyChanged(nameof(SearchName));
-                Search(null); // Gọi Search mỗi khi SearchName thay đổi
+                Search(null);
+            }
+        }
+
+        private bool IsNovelFavorite(Novel novel)
+        {
+            if (_userId == 0)
+            {
+                return false;
+            }
+            var favorite = novel.Favorites.FirstOrDefault(f => f.UserId == _userId);
+            return favorite != null && favorite.IsFavorite == true;
+        }
+
+        private void UpdateFavoriteButtonText()
+        {
+            if (_selectitem != null && IsNovelFavorite(_selectitem))
+            {
+                FavoriteButtonText = "Remove from Favorites";
+            }
+            else
+            {
+                FavoriteButtonText = "Add to Favorites";
             }
         }
 
@@ -86,13 +140,20 @@ namespace Novel_App.ViewModel.User
         {
             if (string.IsNullOrWhiteSpace(SearchName))
             {
-                Novels = new ObservableCollection<Novel>(allnovels);
+                if (_isViewingFavorites)
+                {
+                    Novels = new ObservableCollection<Novel>(allnovels.Where(n => IsNovelFavorite(n)));
+                }
+                else
+                {
+                    Novels = new ObservableCollection<Novel>(allnovels);
+                }
             }
             else
             {
-                var filteredNovels = allnovels
-                    .Where(s => s.NovelName.Contains(SearchName, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+                var filteredNovels = _isViewingFavorites
+                    ? allnovels.Where(n => IsNovelFavorite(n) && n.NovelName.Contains(SearchName, StringComparison.OrdinalIgnoreCase))
+                    : allnovels.Where(n => n.NovelName.Contains(SearchName, StringComparison.OrdinalIgnoreCase));
                 Novels = new ObservableCollection<Novel>(filteredNovels);
             }
 
@@ -103,9 +164,18 @@ namespace Novel_App.ViewModel.User
         {
             using (var context = new NovelAppContext())
             {
-                var novelList = context.Novels.ToList();
+                var novelList = context.Novels
+                    .Include(n => n.Genres)
+                    .Include(n => n.Favorites)
+                    .ToList();
+
                 allnovels = new ObservableCollection<Novel>(novelList);
                 Novels = new ObservableCollection<Novel>(allnovels);
+
+                if (_isViewingFavorites)
+                {
+                    Novels = new ObservableCollection<Novel>(allnovels.Where(n => IsNovelFavorite(n)));
+                }
             }
         }
 
@@ -126,6 +196,80 @@ namespace Novel_App.ViewModel.User
                 MyNovel.Show();
                 Application.Current.Windows[0]?.Close();
             }
+        }
+
+        private void ToggleFavorite(object obj)
+        {
+            if (_selectitem != null)
+            {
+                if (_userId == 0)
+                {
+                    MessageBox.Show("Please log in to favorite a novel.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                using (var context = new NovelAppContext())
+                {
+                    var favorite = context.Favorites
+                        .FirstOrDefault(f => f.UserId == _userId && f.NovelId == _selectitem.NovelId);
+
+                    if (favorite == null)
+                    {
+                        favorite = new Favorite
+                        {
+                            UserId = _userId,
+                            NovelId = _selectitem.NovelId,
+                            IsFavorite = true
+                        };
+                        context.Favorites.Add(favorite);
+                    }
+                    else
+                    {
+                        favorite.IsFavorite = !favorite.IsFavorite;
+                    }
+
+                    context.SaveChanges();
+
+                    // Tải lại selectitem để cập nhật Favorites và Genres
+                    var updatedNovel = context.Novels
+                        .Include(n => n.Favorites)
+                        .Include(n => n.Genres)
+                        .FirstOrDefault(n => n.NovelId == _selectitem.NovelId);
+
+                    if (updatedNovel != null)
+                    {
+                        // Cập nhật selectitem
+                        _selectitem = updatedNovel;
+
+                        // Cập nhật mục tương ứng trong allnovels
+                        var index = allnovels.IndexOf(allnovels.FirstOrDefault(n => n.NovelId == _selectitem.NovelId));
+                        if (index >= 0)
+                        {
+                            allnovels[index] = updatedNovel;
+                        }
+
+                        // Cập nhật giao diện
+                        OnPropertyChanged(nameof(selectitem));
+                        UpdateFavoriteButtonText();
+
+                        // Cập nhật danh sách Novels
+                        Search(null);
+                    }
+                }
+            }
+        }
+
+        private void ToggleViewFavorites(object obj)
+        {
+            if (_userId == 0)
+            {
+                MessageBox.Show("Please log in to view your favorite novels.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            _isViewingFavorites = !_isViewingFavorites;
+            ViewFavoritesButtonText = _isViewingFavorites ? "View All Novels" : "View Favorites";
+            Search(null);
         }
     }
 }
