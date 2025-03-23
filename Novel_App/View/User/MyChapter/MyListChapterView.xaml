@@ -1,0 +1,87 @@
+﻿<!-- MyListChapterView.xaml -->
+<Page x:Class="Novel_App.View.User.MyChapter.MyListChapterView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:Novel_App.View.User.MyChapter"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MyListChapterView">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Các nút Add, Update, Delete -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
+            <Button Content="Add" Width="80" Margin="5" Click="AddChapter_Click"/>
+            <Button Content="Update" Width="80" Margin="5" Click="UpdateChapter_Click"/>
+            <Button Content="Delete" Width="80" Margin="5" Command="{Binding DeleteCommand}"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="207.5" />
+                <ColumnDefinition Width="17"/>
+                <ColumnDefinition Width="35.5"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Danh sách chương -->
+            <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5,5,5,5" Width="250" Grid.ColumnSpan="3">
+                <ListView x:Name="listView_Chapters"
+                      ItemsSource="{Binding chapters}"
+                    SelectedItem="{Binding SelectedChapter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Background="LightGray"
+                      Margin="2">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                            <Run Text="No. " />
+                            <Run Text="{Binding ChapterNumber}"/>
+                            <Run Text="{Binding ChapterName}" FontWeight="Bold"/>
+                            <Run Text=" [" />
+                            <Run Text="{Binding Novel.NovelName}" FontStyle="Italic"/>
+                            <Run Text=" ]" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+
+            <!-- Chi tiết chương -->
+            <Border Grid.Column="3" BorderBrush="Black" BorderThickness="1" Margin="5,5,5,5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="10">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}&#x0a;Chapter {1}: {2}">
+                                <Binding Path="SelectedChapter.Novel.NovelName"/>
+                                <Binding Path="SelectedChapter.ChapterNumber"/>
+                                <Binding Path="SelectedChapter.ChapterName"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <TextBox Text="{Binding ChapterContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             IsReadOnly="True"
+                             Margin="10" />
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+
+</Page>

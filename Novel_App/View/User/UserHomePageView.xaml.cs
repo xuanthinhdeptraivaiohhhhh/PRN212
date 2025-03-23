@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Novel_App.View.User.MyChapter;
 
 namespace Novel_App.View.User
 {
@@ -31,7 +32,7 @@ namespace Novel_App.View.User
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
-            FrMain.Content = null;
+            FrMain.Content = new MyListChapterView();
         }
 
         private void Mynovel_Click(object sender, RoutedEventArgs e)
