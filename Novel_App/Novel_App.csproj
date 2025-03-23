@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.27.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,10 +23,14 @@
   <ItemGroup>
     <Folder Include="ViewModel\Adminn\" />
     <Folder Include="ViewModel\Staff\" />
-    <Folder Include="ViewModel\User\" />
     <Folder Include="View\Admin\" />
     <Folder Include="View\Staff\" />
-    <Folder Include="View\User\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
