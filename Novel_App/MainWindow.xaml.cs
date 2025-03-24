@@ -33,10 +33,6 @@ namespace Novel_App
         {
             MainFrame.Navigate(new GenreView());
         }
-
-        private void Register_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new Register());
-        }
+        
     }
 }
