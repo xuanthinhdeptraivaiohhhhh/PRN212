@@ -9,7 +9,6 @@ using System.Windows.Input;
 using System.Windows;
 using Novel_App.Model;
 using Novel_App.Utilities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Novel_App.ViewModel.Staff
 {
@@ -18,7 +17,7 @@ namespace Novel_App.ViewModel.Staff
         private readonly NovelAppContext _context = new NovelAppContext();
 
         public ObservableCollection<Genre> Genres { get; set; }
-        private Genre _selectedGenre = new Genre(); 
+        private Genre _selectedGenre = new Genre(); // ✅ Fix lỗi CS8618
 
         public Genre SelectedGenre
         {
@@ -83,10 +82,7 @@ namespace Novel_App.ViewModel.Staff
         {
             if (SelectedGenre == null) return;
 
-            var genre = _context.Genres
-           .Include(g => g.Novels)
-          .FirstOrDefault(g => g.GenreId == SelectedGenre.GenreId);
-            genre.Novels.Clear();
+            var genre = _context.Genres.FirstOrDefault(g => g.GenreId == SelectedGenre.GenreId);
             if (genre != null)
             {
                 _context.Genres.Remove(genre);
