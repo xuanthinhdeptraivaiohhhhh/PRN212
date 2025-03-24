@@ -45,6 +45,17 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+
+        <Style TargetType="Grid" x:Key="GridVisibilityStyle">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsListVisible}" Value="true">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
     </Page.Resources>
 
     <Grid Background="AliceBlue">
@@ -213,6 +224,56 @@
                 </ListView.View>
             </ListView>
 
+        </Grid>
+
+
+        <Grid Grid.Row="0"  Grid.Column="2" Grid.RowSpan="2"
+              Style="{StaticResource GridVisibilityStyle}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Hình ảnh -->
+                <RowDefinition Height="*"/>
+                <!-- Thông tin chi tiết -->
+                <RowDefinition Height="Auto"/>
+                <!-- Nút View Chapters -->
+            </Grid.RowDefinitions>
+
+
+
+            <!-- Hình ảnh tiểu thuyết -->
+            <Grid Grid.Row="0">
+                <Image Source="{Binding selecteditem.ImageUrl}" 
+                           Height="250" Width="200" Stretch="UniformToFill" 
+                           HorizontalAlignment="Center" Margin="0,0,0,10"/>
+            </Grid>
+
+            <!-- Thông tin chi tiết (thêm ScrollViewer) -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <TextBlock Text="Novel Name: " FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="{Binding selecteditem.NovelName}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <TextBlock Text="Description: " FontWeight="Bold" FontSize="14" VerticalAlignment="Top"/>
+                        <TextBlock Text="{Binding selecteditem.NovelDescription}" 
+                                       TextWrapping="Wrap" FontSize="14" MaxWidth="400"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <TextBlock Text="Total Chapters: " FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="{Binding selecteditem.TotalChapter}" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <TextBlock Text="Published Date: " FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="{Binding selecteditem.PublishedDate, StringFormat={}{0:dd/MM/yyyy}}" 
+                                       FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <TextBlock Text="Status: " FontWeight="Bold" FontSize="14"/>
+                        <TextBlock Text="{Binding selecteditem.NovelStatus}" FontSize="14"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
 
 
