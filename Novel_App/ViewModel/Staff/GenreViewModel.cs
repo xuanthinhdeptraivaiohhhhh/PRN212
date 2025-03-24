@@ -9,10 +9,9 @@ using System.Windows.Input;
 using System.Windows;
 using Novel_App.Model;
 using Novel_App.Utilities;
-<<<<<<< HEAD
+
 using Microsoft.EntityFrameworkCore;
-=======
->>>>>>> parent of 9a5f11b (Revert "View all Genre , add , edit ,delete")
+
 
 namespace Novel_App.ViewModel.Staff
 {
@@ -21,11 +20,11 @@ namespace Novel_App.ViewModel.Staff
         private readonly NovelAppContext _context = new NovelAppContext();
 
         public ObservableCollection<Genre> Genres { get; set; }
-<<<<<<< HEAD
+
         private Genre _selectedGenre = new Genre(); 
-=======
+
         private Genre _selectedGenre = new Genre(); // ✅ Fix lỗi CS8618
->>>>>>> parent of 9a5f11b (Revert "View all Genre , add , edit ,delete")
+
 
         public Genre SelectedGenre
         {
