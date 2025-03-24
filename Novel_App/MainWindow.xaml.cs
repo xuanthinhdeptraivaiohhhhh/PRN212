@@ -8,13 +8,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
-using Novel_App.View.Staff;
-using Novel_App.ViewModel.Staff;
-using Novel_App.View;
-using Novel_App.ViewModel.User;
-using Novel_App.View.User;
-
 
 namespace Novel_App
 {
@@ -26,13 +19,6 @@ namespace Novel_App
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new GenreViewModel();
-
         }
-        private void ViewGenres_Click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new GenreView());
-        }
-        
     }
 }
