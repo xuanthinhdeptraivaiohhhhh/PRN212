@@ -7,6 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
 
+        <!-- Nút đăng ký -->
+        <Button Content="Đăng ký" Width="150" Height="40"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Click="Register_Click" Margin="583,95,0,0"/>
+
+        <!-- Nút xem thể loại -->
+        <Button Content="View Genres" Width="150" Height="40"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Click="ViewGenres_Click" Margin="583,10,0,0"/>
     </Grid>
 </Window>
